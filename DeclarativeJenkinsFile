@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+     tools {nodejs "nodejs"}
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout code from Git repository
+               git credentialsId: 'a1878cee-a2f3-40c4-ba4b-d9483e4cc32c', url: 'https://github.com/karanagarwal569/WebApp.git'
+               //git credentialsId: 'gittt', url: 'https://github.com/karanagarwal569/WebApp.git'
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                // Clean and build Maven project
+                bat 'npm install'
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                // Run tests
+                echo 'Runnin test....'
+               // bat 'npm test'
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                // Deploy artifacts or perform additional steps
+                echo 'Deploying artifacts...'
+                 bat 'node index.js'
+                // Example: deploy to a server or artifact repository
+            }
+        }
+    }
+    
+    post {
+        success {
+            // Send notifications on success
+            echo 'Build successful! Sending notifications...'
+            // Example: send email notifications
+        }
+        
+        failure {
+            // Send notifications on failure
+            echo 'Build failed! Sending notifications...'
+            // Example: send email notifications
+        }
+    }
+}
